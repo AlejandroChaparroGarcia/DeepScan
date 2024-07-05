@@ -7,5 +7,7 @@ import java.io.IOException;
 
 public interface StorageService {
 
+    //Store file
+    
     void store(MultipartFile file) throws IOException;
 }
