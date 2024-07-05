@@ -35,9 +35,7 @@ public class FileUploadController {
         } catch (IOException e) {
             return "error";
         }
-
-        System.out.println("Validations successful!!");
-
+        
         double result = predictor.predict();
 
         model.addAttribute("score", String.format("%f", result));
