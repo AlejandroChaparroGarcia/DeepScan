@@ -27,6 +27,7 @@
 name: deploy-webapp
 
 on:
+    workflow_dispatch:
     workflow_run:
         workflows: ['build-webapp']
         types: [completed]
@@ -53,6 +54,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Download deployable
+      uses: actions/download-artifact@v4
+      with:
+        name: deepscan_webapp
+        path: deployable
+        
+    - name: Display structure of downloaded files
+      run: ls -R deployable
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -65,7 +75,7 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build, tag, and push image to Amazon ECR
-      working-directory: ./app/webapp
+      working-directory: deployable
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
